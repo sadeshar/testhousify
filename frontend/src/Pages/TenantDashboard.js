@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
 
 const user = {
   name: 'Tom Cook',
@@ -8,7 +9,7 @@ const user = {
   imageUrl:
     'https://media.licdn.com/dms/image/C5603AQFZmW2Nm7k2AQ/profile-displayphoto-shrink_800_800/0/1663648587937?e=2147483647&v=beta&t=lKfL6zxaowtklDGfMJw1jMrpkFHQd4YC4t3ADVv0ef0',
 }
-const navigation = [
+const initialNavigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Housing Near Me', href: '#', current: false },
   { name: 'My Current Housing', href: '#', current: false },
@@ -26,6 +27,15 @@ function classNames(...classes) {
 }
 
 export default function Dashboard() {
+  const [navigation, setNavigation] = useState(initialNavigation);
+
+  const handleNavigationClick = (clickedIndex) => {
+    const updatedNavigation = navigation.map((item, index) => ({
+      ...item,
+      current: index === clickedIndex,
+    }));
+    setNavigation(updatedNavigation);
+  };
   return (
     <>
       <div className="min-h-full">
@@ -44,7 +54,7 @@ export default function Dashboard() {
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
-                        {navigation.map((item) => (
+                        {navigation.map((item, index) => (
                           <a
                             key={item.name}
                             href={item.href}
@@ -55,6 +65,7 @@ export default function Dashboard() {
                               'rounded-md px-3 py-2 text-sm font-medium'
                             )}
                             aria-current={item.current ? 'page' : undefined}
+                            onClick={() => handleNavigationClick(index)} // Added onClick handl
                           >
                             {item.name}
                           </a>
